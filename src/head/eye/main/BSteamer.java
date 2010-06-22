@@ -9,15 +9,16 @@ public class BSteamer extends Activity {
     /** Called when the activity is first created. */
 
 	private cameraview cam;
-	
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera);
-        
+
         cam = new cameraview(this);
         ((FrameLayout) findViewById(R.id.preview)).addView(cam);
-        
-       
+        // Create A Preview View
+
+
     }
 }
