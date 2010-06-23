@@ -3,4 +3,5 @@
     <string name="hello">Hello World, BSteamer!</string>
     <string name="app_name">BeagleStreamer</string>
 <string name="PlayStream">Play</string>
+<string name="error">Test</string>
 </resources>

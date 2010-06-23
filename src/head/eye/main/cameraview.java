@@ -1,12 +1,7 @@
 package head.eye.main;
 
-import java.io.IOException;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.hardware.Camera;
-import android.hardware.Camera.PreviewCallback;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
