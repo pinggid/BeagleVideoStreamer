@@ -3,15 +3,8 @@ package head.eye.main;
 import java.io.IOException;
 
 import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.*;
@@ -19,11 +12,11 @@ import android.widget.*;
 
 public class BSteamer extends Activity {
     /** Called when the activity is first created. */
-
+	private static final String TAG = "CameraDemo";
 	private cameraview cam;
 	private Button buttonClick;
 	private static boolean toogleButtonFlag = true;
-	private MediaRecorder recorder = new MediaRecorder(); 
+	private VideoRecorder vRecorder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -33,44 +26,30 @@ public class BSteamer extends Activity {
         cam = new cameraview(this);
         ((FrameLayout) findViewById(R.id.preview)).addView(cam);
         // Create A Preview View
-                
+        Log.d(TAG, "Create Camera Preview View 2");
+        vRecorder = new VideoRecorder("");
+        
         buttonClick = (Button) findViewById(R.id.buttonClick);
 		buttonClick.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				if(toogleButtonFlag )
-				{
-					startRecording();
-					toogleButtonFlag = false;
+				try{
+					if(toogleButtonFlag )
+					{   Log.d(TAG, "Camera Started");
+						vRecorder.start();
+						toogleButtonFlag = false;
+					}
+					else{
+						Log.d(TAG, "Camera Stoped");
+						vRecorder.stop();
+						toogleButtonFlag = true;
+					}
 				}
-				else{
-					stopRecording();
-					toogleButtonFlag = true;
+				catch(IOException e){
+					e.printStackTrace();
 				}
 				
 			}
 		});
-    }
-    
-    public void startRecording(){
-    	recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-    	 recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-    	 recorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
-    	 recorder.setOutputFile("/sdcard/.3pg");
-    	 try{
-    	 recorder.prepare();
-    	 }
-    	 catch(IOException e)
-    	 {
-    		 e.printStackTrace();
-    		 recorder.reset();   
-			 recorder.release();
-    	 }
-    	 recorder.start();   // Recording is now started
-    }
-    
-    public void stopRecording(){
-    	 recorder.stop();
-	   	 recorder.reset();   // You can reuse the object by going back to setAudioSource() step
-	   	 recorder.release(); // Now the object cannot be reused
+		Log.d(TAG, "onCreate'd");
     }
 }
