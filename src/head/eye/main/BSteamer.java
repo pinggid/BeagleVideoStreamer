@@ -23,8 +23,8 @@ public class BSteamer extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.camera);
         
-        cam = new cameraview(this);
-        ((FrameLayout) findViewById(R.id.preview)).addView(cam);
+        //cam = new cameraview(this);
+        //((FrameLayout) findViewById(R.id.preview)).addView(cam);
         // Create A Preview View
         Log.d(TAG, "Create Camera Preview View 2");
         vRecorder = new VideoRecorder("");

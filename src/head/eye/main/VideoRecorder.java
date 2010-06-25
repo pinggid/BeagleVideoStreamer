@@ -26,6 +26,7 @@ public class VideoRecorder {
 	    if (!path.contains(".")) {
 	      path += "DCIM/test.3gp";
 	    }
+	    
 	    Log.d(TAG1, Environment.getExternalStorageDirectory().getAbsolutePath());
 	    Log.d(TAG1, path);
 	    return Environment.getExternalStorageDirectory().getAbsolutePath() + path;
@@ -50,12 +51,24 @@ public class VideoRecorder {
 	    }
 	    Log.d(TAG1, "setVideoSource");
 	    recorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+	    //Log.d(TAG1, "setAudioSource");
+	    //recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 	    Log.d(TAG1, "setOutputFormat");
 	    recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-	    Log.d(TAG1, "setVideoEncoder");
-	    recorder.setVideoEncoder(MediaRecorder.VideoEncoder.DEFAULT);
+	    Log.d(TAG1, "setMaxDuration");
+	    recorder.setMaxDuration(9000);
 	    Log.d(TAG1, "setOutputFile: " + path);
 	    recorder.setOutputFile(path);
+	    Log.d(TAG1, "setVideoFrameRate");
+	    recorder.setVideoFrameRate(20);
+	    Log.d(TAG1, "setVideoSize");
+	    recorder.setVideoSize(176,144);
+	    //Log.d(TAG1, "setAudioEncoder");
+	    //recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+	    Log.d(TAG1, "setVideoEncoder");
+	    recorder.setVideoEncoder(MediaRecorder.VideoEncoder.H263);	    	    
+	    Log.d(TAG1, "setPreviewDisplay");
+	    recorder.setPreviewDisplay(null);    
 	    Log.d(TAG1, "prepare");
 	    try{
 	    	recorder.prepare();
@@ -65,9 +78,8 @@ public class VideoRecorder {
 		    recorder.reset();
 		    Log.d(TAG1, "releasestop"); 
 		    recorder.release();
-	    	Log.d(TAG1, "Exception" + e.getMessage());
-	    	Log.d(TAG1, "Exception" + e.getLocalizedMessage());
-	    	Log.d(TAG1, "Exception" + e.toString());
+	    	Log.d(TAG1, "Exception: " + e.getMessage());
+	    	Log.d(TAG1, "Exception: " + e.toString());
 	    	return;
 	    }
 	    Log.d(TAG1, "recorderstart");
