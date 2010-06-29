@@ -93,8 +93,9 @@ public class BSteamer extends Activity {
 			DatagramPacket packet = null;
 			try {
 				Log.d(TAG, "new DatagramPacket");
-				packet = new DatagramPacket(data, data.length, InetAddress.getByName("172.22.134.162"), 1235);
-				packet.setData(new byte[1000000]);
+				byte[] databuffer = new byte[128];
+				packet = new DatagramPacket(data, 49000, InetAddress.getByName("155.69.149.39"), 1235);
+				Log.d(TAG, "Length: " + packet.getLength());
 				Log.d(TAG, "socket.send(packet)");
 				socket.send(packet);
 				Log.d(TAG, "socket.close()");
