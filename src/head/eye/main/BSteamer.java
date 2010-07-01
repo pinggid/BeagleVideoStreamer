@@ -43,6 +43,29 @@ public class BSteamer extends Activity {
         //Log.d(TAG, "Create Camera Preview View 2");
         //vRecorder = new VideoRecorder("");
         
+        Thread t = new Thread() {
+
+	          public void run() {
+	        	  try {
+						Log.d(TAG, "DatagramSocket soc");
+						soc = new DatagramSocket(1235);
+						//String addRess = soc.getInetAddress().toString();
+						//Log.d(TAG, "Address: " + addRess);
+						Log.d(TAG, "byte buffer[]");
+						byte bufferq[] = new byte[55000];
+						Log.d(TAG, "DatagramPacket pac ");
+				        DatagramPacket pac = new DatagramPacket(bufferq, bufferq.length);
+				        Log.d(TAG, "soc.receive(pac): " + pac.getLength());
+				        soc.receive(pac);
+				        Log.d(TAG, "RECEIEVED!!! " + pac.getLength());
+					} catch (SocketException e) {
+						Log.d(TAG, "SocketException: " + e.getMessage());
+					} catch (IOException e) {
+						Log.d(TAG, "IOException: " + e.getMessage());
+					}
+	          }
+	      };
+	      t.start();
         buttonClick = (Button) findViewById(R.id.buttonClick);
 		buttonClick.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -66,24 +89,6 @@ public class BSteamer extends Activity {
 			}
 		});
 		Log.d(TAG, "onCreate'd");
-		try {
-			Log.d(TAG, "DatagramSocket soc");
-			soc = new DatagramSocket();
-			soc.setBroadcast(true);
-			Log.d(TAG, "byte buffer[]");
-			byte buffer[] = new byte[65508];
-			Log.d(TAG, "DatagramPacket pac ");
-	        DatagramPacket pac = new DatagramPacket(buffer, buffer.length);
-	        Log.d(TAG, "soc.receive(pac): " + pac.getLength());
-	        soc.receive(pac);
-	        Log.d(TAG, "soc.close() " + pac.getLength());
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			Log.d(TAG, "SocketException: " + e.getMessage());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.d(TAG, "IOException: " + e.getMessage());
-		}
     }
     ShutterCallback shutterCallback = new ShutterCallback() {
 		public void onShutter() {
@@ -107,7 +112,7 @@ public class BSteamer extends Activity {
 			DatagramSocket socket = null;
 			try {
 				Log.d(TAG, "socket = new DatagramSocket()");
-				socket = new DatagramSocket();
+				socket = new DatagramSocket(1235);
 			} catch (SocketException e1) {
 				// TODO Auto-generated catch block
 				Log.d(TAG, "Exception: " + e1.getMessage());
@@ -141,6 +146,7 @@ public class BSteamer extends Activity {
 				input.close();
 				socket.close();
 				Log.d(TAG, "onPictureTaken - wrote bytes: " + buffer.length);
+				
 			} catch (FileNotFoundException e) {
 				Log.d(TAG, "IOException: " + e.getMessage());
 			} 
