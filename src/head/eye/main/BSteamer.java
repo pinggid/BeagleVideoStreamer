@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 
 import android.app.Activity;
@@ -30,7 +32,6 @@ public class BSteamer extends Activity {
 	private Button buttonClick;
 	private static boolean toogleButtonFlag = true;
 	private VideoRecorder vRecorder;
-	public DatagramSocket soc = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,11 +47,9 @@ public class BSteamer extends Activity {
         Thread t = new Thread() {
 
 	          public void run() {
-	        	  try {
+	        	   	 try {
 						Log.d(TAG, "DatagramSocket soc");
-						soc = new DatagramSocket(1235);
-						//String addRess = soc.getInetAddress().toString();
-						//Log.d(TAG, "Address: " + addRess);
+						DatagramSocket soc = new DatagramSocket();
 						Log.d(TAG, "byte buffer[]");
 						byte bufferq[] = new byte[55000];
 						Log.d(TAG, "DatagramPacket pac ");
@@ -90,6 +89,7 @@ public class BSteamer extends Activity {
 		});
 		Log.d(TAG, "onCreate'd");
     }
+    
     ShutterCallback shutterCallback = new ShutterCallback() {
 		public void onShutter() {
 			Log.d(TAG, "onShutter'd");
@@ -106,25 +106,14 @@ public class BSteamer extends Activity {
 	/** Handles data for jpeg picture */
 	PictureCallback jpegCallback = new PictureCallback() {
 		public void onPictureTaken(byte[] data, Camera camera) {
-			Log.d(TAG, "FileOutputStream outStream");
 			FileOutputStream outStream = null;
-			Log.d(TAG, "DatagramSocket socket");
 			DatagramSocket socket = null;
 			try {
-				Log.d(TAG, "socket = new DatagramSocket()");
-				socket = new DatagramSocket(1235);
+				socket = new DatagramSocket();
 			} catch (SocketException e1) {
-				// TODO Auto-generated catch block
-				Log.d(TAG, "Exception: " + e1.getMessage());
-				e1.printStackTrace();
-			}
-			DatagramPacket packet = null;
+				Log.d(TAG, "SocketException: " + e1.getMessage());
+			}		
 			try {
-				//Log.d(TAG, "socket.send(packet)");
-				//socket.send(packet);
-				//Log.d(TAG, "socket.close()");
-				//socket.close();
-				//Log.d(TAG, "new FileOutputStream");
 				long fileName = System.currentTimeMillis();
 				outStream = new FileOutputStream(String.format("/sdcard/DCIM/%d.jpg", fileName));
 				Log.d(TAG, "Compress");
@@ -136,24 +125,20 @@ public class BSteamer extends Activity {
 				Log.d(TAG, "Compressed Byte: " + input.available());
 				input.read(buffer);
 				Log.d(TAG, "new DatagramPacket");
-				packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("155.69.148.140"), 1235);
+				DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("155.69.148.140"), 5554);
 				Log.d(TAG, "Length: " + packet.getLength());								
-				Log.d(TAG, "outStream.write");
-				//outStream.write(data);
-				//Log.d(TAG, "outStream.close()");
 				socket.send(packet);
 				outStream.close();
 				input.close();
 				socket.close();
 				Log.d(TAG, "onPictureTaken - wrote bytes: " + buffer.length);
-				
 			} catch (FileNotFoundException e) {
 				Log.d(TAG, "IOException: " + e.getMessage());
 			} 
 				catch (IOException e) {
 				Log.d(TAG, "IOException: " + e.getMessage());
 			}
-			Log.d(TAG, "onPictureTaken - jpeg");
+				Log.d(TAG, "onPictureTaken - jpeg");
 		}
 	};
 }
